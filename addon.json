@@ -1,5 +1,5 @@
 {
-	"title"		:	"[TTT2] Boom Body [WEAPON]",
+	"title"		:	"[TTT2] Boom Body [WEAPON] (with radar convar)",
 	"type"		:	"effects",
     "tags"		:	[ "realism", "fun" ],
     "ignore"    : [
