@@ -9,6 +9,7 @@ L["boom_body_no_search"] = "This is a boom body. You can't search it."
 
 L["boom_body_help_msb1"] = "Drops the boom body on the floor"
 
+L["label_boom_body_allow_radar"] = "Show boom body radar for player and teammates"
 L["label_boom_body_allow_pickup"] = "Allow boom body placer to pick it up again"
 L["label_boom_body_spawn_blood"] = "Spawn blood around placed boom body"
 L["label_boom_body_explosion_delay"] = "Delay in seconds before the boom body explodes"
