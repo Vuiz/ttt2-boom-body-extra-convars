@@ -7,6 +7,11 @@ function CLGAMEMODESUBMENU:Populate(parent)
     local form = vgui.CreateTTT2Form(parent, "General Settings")
 
     form:MakeCheckBox({
+        serverConvar = "ttt2_boom_body_allow_radar",
+        label = "label_boom_body_allow_radar"
+    })
+    
+    form:MakeCheckBox({
         serverConvar = "ttt2_boom_body_allow_pickup",
         label = "label_boom_body_allow_pickup"
     })
