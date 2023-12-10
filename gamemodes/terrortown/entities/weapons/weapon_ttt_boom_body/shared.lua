@@ -53,6 +53,7 @@ SWEP.Weight = 5
 
 game.AddDecal("chalk_outline", "decals/decal_chalk_outline")
 
+local cvAllowRadar = CreateConVar("ttt2_boom_body_allow_radar", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 local cvAllowPickup = CreateConVar("ttt2_boom_body_allow_pickup", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 local cvPainSound = CreateConVar("ttt2_boom_body_pain_sound", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 local cvExplosionDelay = CreateConVar("ttt2_boom_body_explosion_delay", "0", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
@@ -68,7 +69,7 @@ if SERVER then
 	local cvSpawnBlood = CreateConVar("ttt2_boom_body_spawn_blood", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED})
 
 	local function UpdateRadar(state, rag)
-		if not IsValid(rag) then return end
+		if not IsValid(rag) and cvAllowRadar:GetBool() then return end
 
 		net.Start("BoomBodyUpdateRadar")
 
@@ -252,7 +253,7 @@ else --CLIENT
 	net.Receive("BoomBodyUpdateRadar", function()
 		local idx = net.ReadUInt(16)
 
-		if net.ReadBool() then
+		if net.ReadBool() and cvAllowRadar:GetBool() then
 			RADAR.bombs[idx] = {
 				pos = net.ReadVector(),
 				team = net.ReadString(),
@@ -276,17 +277,18 @@ else --CLIENT
 		if not CORPSE.GetPlayerNick(ent, false) then return end
 
 		local bbRadar = RADAR.bombs[ent:EntIndex()]
-
-		if client == ent:GetNWEntity("boom_body_owner") and cvAllowPickup:GetBool() then
-			tData:AddDescriptionLine(
-				LANG.GetParamTranslation("boom_body_own_ragdoll", key_params),
-				COLOR_ORANGE
-			)
-		elseif bbRadar and bbRadar.team == client:GetTeam() then
-			tData:AddDescriptionLine(
-				LANG.GetTranslation("boom_body_warn_ragdoll"),
-				COLOR_ORANGE
-			)
+		if cvAllowRadar:GetBool() then
+			if client == ent:GetNWEntity("boom_body_owner") and cvAllowPickup:GetBool() then
+				tData:AddDescriptionLine(
+					LANG.GetParamTranslation("boom_body_own_ragdoll", key_params),
+					COLOR_ORANGE
+				)
+			elseif bbRadar and bbRadar.team == client:GetTeam() then
+				tData:AddDescriptionLine(
+					LANG.GetTranslation("boom_body_warn_ragdoll"),
+					COLOR_ORANGE
+				)
+			end
 		end
 	end)
 
